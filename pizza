@@ -1,0 +1,111 @@
+<?php
+session_start();
+$usernames = $_SESSION['pizzaorderer'];
+if(isset($_POST['submit'])){
+  $toptype = "";
+  $lpizza = htmlentities($_POST['lpizza']);
+  $mpizza = htmlentities($_POST['mpizza']);
+  $spizza = htmlentities($_POST['spizza']);
+$d=0;
+  $toppings = htmlentities($_POST['top']);
+  $donate = htmlentities($_POST['donate']);
+$pizzatotal = ($lpizza * 1000) + ($mpizza * 700) + ($spizza * 400);
+
+$pizzas = $lpizza + $mpizza + $spizza;
+if ($_POST['donate'] == 'donate') {
+  $donamount = "Bless Your Kind Soul for your 200KES Donation!";
+  $d=200;
+}
+if ($toppings=="meat") {
+  $topamount = $pizzas * 150;
+  $toptype = "Meat";
+}
+
+if ($toppings=="veg") {
+  $topamount = $pizzas * 100;
+  $toptype = "Vegetable";
+}
+
+if ($toppings=="notop") {
+  $topamount = 0;
+  $toptype = "No";
+}
+$absoluttotal = $pizzatotal + $d + $topamount;
+
+$_SESSION['largequantity']=$lpizza;
+$_SESSION['mediumquantity']=$mpizza;
+$_SESSION['smallquantity']=$spizza;
+$_SESSION['toppings']=$pizzas;
+$_SESSION['topamount']=$topamount;
+$_SESSION['donation']= $donamount;
+$_SESSION['pizatotals']=$pizzatotal;
+$_SESSION['toptype']=$toptype;
+$_SESSION['totalabs']=$absoluttotal;
+
+
+  header('Location: order.php');
+}
+ ?>
+<html>
+<head>
+<link href="./style.css"  rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container">
+      <h6 style="color: white; font-size: 25px;">Order for <?php echo $usernames; ?></h6>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="btn btn-primary" role="button" href="../login.php">Sign Out</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="orderForm" style="">
+<h4 name="head" style="font-weight: bold; font-size: 25px; color:#3987c9;">Pizza Quantity</h4>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<div class='row'>
+&nbsp; <input maxlength="2" size="2" required type="text" placeholder="0" name="lpizza" style="margin-left:20px; width: 25px; font-weight: bold;">&nbsp;&nbsp;
+<label for="lpizza" style="padding-left: 10px; font-size: 20px;"> Large Pizza (Ksh 1000)</label>
+</div> <br>
+<div class='row'>&nbsp;
+<input type="text" maxlength="2" size="2" required placeholder="0" name="mpizza" style="margin-left:20px; width: 25px; font-weight: bold;">&nbsp;&nbsp;
+<label for="mpizza" style="padding-left: 10px; font-size: 20px;">Medium Pizza (Ksh 700)</label>
+</div> <br>
+<div class='row'>&nbsp;
+<input type="text" maxlength="2" size="2" required placeholder="0" name="spizza" style="margin-left:20px; width: 25px; font-weight: bold;">&nbsp;&nbsp;
+<label for="spizza" style="padding-left: 10px; font-size: 20px;"> Small Pizza (Ksh 400)</label>
+</div> <br>
+
+<h5 name="xtra" style="font-weight: bold; font-size: 25px; color:#3987c9;">Extra Toppings</h5>
+<br>
+<div class="row" style="padding-left:25px;">
+	<input type="radio"  name="top" value="meat" required> Meat Toppings(Ksh 150)<br>
+</div>
+<br>
+<div class="row" style="padding-left:25px;">
+    <input type="radio"  name="top" value="veg">Vegetable Toppings (Ksh 100) <br>
+</div>
+<br>
+<div class="row" style="padding-left:25px;">
+	<input type="radio"  name="top" value="notop" checked> No Toppings (Ksh 0)
+</div>
+<br><br>
+<div class="row">
+<h5 name="feed" style="font-size: 20px; color:#3987c9;padding-left:20px;">Feed a Hungry Child Today?</h5>
+</div>
+<div class="row" style="padding-left:25px;">
+<input  type="checkbox" id="donate" name="donate" value="donate">Donate Ksh 200<br>
+</div>
+<br>
+<div class="row" style="padding-left:25px;">
+<input style="font-size:30px; color: #3987c9;" type="submit" value="ORDER NOW" name="submit">
+</div>
+</div>
+</form>
+</body>
+</html>
